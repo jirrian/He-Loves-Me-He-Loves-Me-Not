@@ -8,6 +8,9 @@ public class FlowerInstantiate : MonoBehaviour {
 	
 	public Color[] petalColors;
 
+	public Transform leafOnePrefab;
+	public Transform leafTwoPrefab;
+
 	// Use this for initialization
 	void Start () {
 		// choose number of petals
@@ -25,7 +28,7 @@ public class FlowerInstantiate : MonoBehaviour {
 			float x = Mathf.Sin(angle) * radius;
 			float y = Mathf.Cos(angle) * radius;
 
-			pos = new Vector3(x,y) + center;
+			pos = new Vector3(x,y,-1) + center;
 
 			// randomly choose petal prefab
 			// instantiate
@@ -60,10 +63,28 @@ public class FlowerInstantiate : MonoBehaviour {
 			// add as child of center
 			newPetal.transform.parent = gameObject.transform;
 		}
+
+		// instantiate leaves
+		int numLeaves = Random.Range(1,3);
+
+		while(numLeaves > 0){
+			Transform newLeaf = (Transform) Instantiate(leafOnePrefab, transform.position, Quaternion.Euler(0, 0, -1 * Random.value * Mathf.PI * 2 * Mathf.Rad2Deg));
+			newLeaf.GetComponent<SpriteRenderer>().sortingOrder = 2;
+			newLeaf.transform.parent = gameObject.transform;
+
+			numLeaves--;
+		}
+
+		Transform newLeafSmall = (Transform) Instantiate(leafTwoPrefab, transform.position, Quaternion.Euler(0, 0, -1 * Random.value * Mathf.PI * 2 * Mathf.Rad2Deg));
+		newLeafSmall.GetComponent<SpriteRenderer>().sortingOrder = 1;
+		newLeafSmall.transform.parent = gameObject.transform;
+		
 	}
 	
 	// Update is called once per frame
 	void Update () {
 	
+		// rotate
+		transform.Rotate(0, 0, 10 * Time.deltaTime);
 	}
 }
