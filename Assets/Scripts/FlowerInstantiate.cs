@@ -28,7 +28,7 @@ public class FlowerInstantiate : MonoBehaviour {
 			float x = Mathf.Sin(angle) * radius;
 			float y = Mathf.Cos(angle) * radius;
 
-			pos = new Vector3(x,y,-1) + center;
+			pos = new Vector3(x,y) + center;
 
 			// randomly choose petal prefab
 			// instantiate
@@ -55,7 +55,7 @@ public class FlowerInstantiate : MonoBehaviour {
 			else{
 				colorIdx = 2;
 			}
-			newPetal.GetComponent<SpriteRenderer>().material.color = petalColors[colorIdx];
+			newPetal.GetComponent<SpriteRenderer>().color = petalColors[colorIdx];
 
 			// change order
 			newPetal.GetComponent<SpriteRenderer>().sortingOrder = 49 - order;
@@ -67,15 +67,17 @@ public class FlowerInstantiate : MonoBehaviour {
 		// instantiate leaves
 		int numLeaves = Random.Range(1,3);
 
+		Vector3 leafPos = new Vector3(transform.position.x, transform.position.y, 1);
+
 		while(numLeaves > 0){
-			Transform newLeaf = (Transform) Instantiate(leafOnePrefab, transform.position, Quaternion.Euler(0, 0, -1 * Random.value * Mathf.PI * 2 * Mathf.Rad2Deg));
+			Transform newLeaf = (Transform) Instantiate(leafOnePrefab, leafPos, Quaternion.Euler(0, 0, -1 * Random.value * Mathf.PI * 2 * Mathf.Rad2Deg));
 			newLeaf.GetComponent<SpriteRenderer>().sortingOrder = 2;
 			newLeaf.transform.parent = gameObject.transform;
 
 			numLeaves--;
 		}
 
-		Transform newLeafSmall = (Transform) Instantiate(leafTwoPrefab, transform.position, Quaternion.Euler(0, 0, -1 * Random.value * Mathf.PI * 2 * Mathf.Rad2Deg));
+		Transform newLeafSmall = (Transform) Instantiate(leafTwoPrefab, leafPos, Quaternion.Euler(0, 0, -1 * Random.value * Mathf.PI * 2 * Mathf.Rad2Deg));
 		newLeafSmall.GetComponent<SpriteRenderer>().sortingOrder = 1;
 		newLeafSmall.transform.parent = gameObject.transform;
 		
@@ -85,6 +87,6 @@ public class FlowerInstantiate : MonoBehaviour {
 	void Update () {
 	
 		// rotate
-		transform.Rotate(0, 0, 10 * Time.deltaTime);
+		transform.Rotate(0, 0, 5 * Time.deltaTime);
 	}
 }
