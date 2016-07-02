@@ -10,11 +10,12 @@ public class FlowerInstantiate : MonoBehaviour {
 
 	public Transform leafOnePrefab;
 	public Transform leafTwoPrefab;
+	public int numPetals;
 
 	// Use this for initialization
 	void Start () {
 		// choose number of petals
-		int numPetals = Random.Range(13,18);
+		numPetals = Random.Range(13,18);
 
 		float radius = 0.5f;
 
@@ -69,6 +70,10 @@ public class FlowerInstantiate : MonoBehaviour {
 
 		Vector3 leafPos = new Vector3(transform.position.x, transform.position.y, 1);
 
+		Transform newLeafSmall = (Transform) Instantiate(leafTwoPrefab, leafPos, Quaternion.Euler(0, 0, -1 * Random.value * Mathf.PI * 2 * Mathf.Rad2Deg));
+		newLeafSmall.GetComponent<SpriteRenderer>().sortingOrder = 1;
+		newLeafSmall.transform.parent = gameObject.transform;
+
 		while(numLeaves > 0){
 			Transform newLeaf = (Transform) Instantiate(leafOnePrefab, leafPos, Quaternion.Euler(0, 0, -1 * Random.value * Mathf.PI * 2 * Mathf.Rad2Deg));
 			newLeaf.GetComponent<SpriteRenderer>().sortingOrder = 2;
@@ -77,16 +82,12 @@ public class FlowerInstantiate : MonoBehaviour {
 			numLeaves--;
 		}
 
-		Transform newLeafSmall = (Transform) Instantiate(leafTwoPrefab, leafPos, Quaternion.Euler(0, 0, -1 * Random.value * Mathf.PI * 2 * Mathf.Rad2Deg));
-		newLeafSmall.GetComponent<SpriteRenderer>().sortingOrder = 1;
-		newLeafSmall.transform.parent = gameObject.transform;
+		
 		
 	}
 	
 	// Update is called once per frame
 	void Update () {
 	
-		// rotate
-		transform.Rotate(0, 0, 5 * Time.deltaTime);
 	}
 }
