@@ -146,8 +146,6 @@ public class PetalManage : MonoBehaviour {
             f += 0.1f;
             yield return new WaitForSeconds(.1f);
         }
-        
-        StartCoroutine(fadeOutFlower());
      }
 
      IEnumerator fadeOutSprite(GameObject sprite){
@@ -156,8 +154,8 @@ public class PetalManage : MonoBehaviour {
             Color color = sprite.transform.gameObject.GetComponent<SpriteRenderer>().color;
             color.a = f;
             sprite.transform.gameObject.GetComponent<SpriteRenderer>().color = color;
-            f -= 0.8f * Time.deltaTime;
-            yield return new WaitForSeconds(.1f);
+            f -= 0.05f;
+            yield return new WaitForSeconds(.2f);
         }
         sprite.GetComponent<SpriteRenderer>().enabled = false;
      }
@@ -194,6 +192,7 @@ public class PetalManage : MonoBehaviour {
                 }
                 if(done == false){
                     StartCoroutine(fadeInText(end));
+                    StartCoroutine(fadeOutFlower());
                 }           
             }
             
