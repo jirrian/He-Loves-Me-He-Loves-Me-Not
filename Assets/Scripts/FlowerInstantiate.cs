@@ -47,14 +47,17 @@ public class FlowerInstantiate : MonoBehaviour {
 			// change color
 			int order = Random.Range(0,numPetals);
 			int colorIdx;
-			if(order <= (numPetals / 3)){
+			if(order <= (numPetals / 4)){
 				colorIdx = 0;
 			}
-			else if(order <= (2 * numPetals / 3)){
+			else if(order <= (numPetals / 2)){
 				colorIdx = 1;
 			}
-			else{
+			else if (order <= (3 * numPetals) / 4){
 				colorIdx = 2;
+			}
+			else{
+				colorIdx = 3;
 			}
 			newPetal.GetComponent<SpriteRenderer>().color = petalColors[colorIdx];
 
@@ -82,12 +85,44 @@ public class FlowerInstantiate : MonoBehaviour {
 			numLeaves--;
 		}
 
-		
-		
+		// fade in sprites
+		StartCoroutine(fadeInFlower());
 	}
 	
 	// Update is called once per frame
 	void Update () {
 	
 	}
+
+	IEnumerator fadeInSprite(GameObject sprite){
+        float f = 0f;
+       while(f <= 1f) {
+            Color color = sprite.transform.gameObject.GetComponent<SpriteRenderer>().color;
+            color.a = f;
+            sprite.transform.gameObject.GetComponent<SpriteRenderer>().color = color;
+            f += 0.1f;
+            yield return new WaitForSeconds(.1f);
+        }
+        Color color1 = sprite.transform.gameObject.GetComponent<SpriteRenderer>().color;
+        color1.a = 1f;
+        sprite.transform.gameObject.GetComponent<SpriteRenderer>().color = color1;
+    }
+
+    IEnumerator fadeInFlower(){
+    	StartCoroutine(fadeInSprite(transform.gameObject));
+
+    	foreach(Transform child in transform){
+    		if(child.tag != "leaf"){
+    			StartCoroutine(fadeInSprite(child.gameObject));
+    		}
+        }
+
+     	yield return new WaitForSeconds(0.8f);
+
+     	foreach(Transform child in transform){
+    		if(child.tag == "leaf"){
+    			StartCoroutine(fadeInSprite(child.gameObject));
+    		}
+        }
+    }
 }

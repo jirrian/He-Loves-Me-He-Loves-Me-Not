@@ -111,10 +111,10 @@ public class PetalManage : MonoBehaviour {
 
         // location of text
         if(Random.value > 0.5f){
-             pos = new Vector3(Random.Range(-45.0f,45.0f),Random.Range(-140.0f,-100.0f),0);
+             pos = new Vector3(Random.Range(-120.0f,120.0f),Random.Range(-550.0f,-350.0f),0);
         }
         else{
-            pos = new Vector3(Random.Range(-45.0f,45.0f),Random.Range(100.0f,140.0f),0);
+            pos = new Vector3(Random.Range(-120.0f,120.0f),Random.Range(550.0f,350.0f),0);
         }
 
         Text newText = (Text) Instantiate(textToInstantiate, pos, Quaternion.identity);
@@ -146,9 +146,34 @@ public class PetalManage : MonoBehaviour {
             f += 0.1f;
             yield return new WaitForSeconds(.1f);
         }
-        done = true;
+        
+        StartCoroutine(fadeOutFlower());
      }
 
+     IEnumerator fadeOutSprite(GameObject sprite){
+        float f = 1f;
+       while(f >= 0f) {
+            Color color = sprite.transform.gameObject.GetComponent<SpriteRenderer>().color;
+            color.a = f;
+            sprite.transform.gameObject.GetComponent<SpriteRenderer>().color = color;
+            f -= 0.8f * Time.deltaTime;
+            yield return new WaitForSeconds(.1f);
+        }
+        sprite.GetComponent<SpriteRenderer>().enabled = false;
+     }
+
+     IEnumerator fadeOutFlower(){
+        
+        foreach(Transform child in transform){
+            StartCoroutine(fadeOutSprite(child.gameObject));
+        }
+
+        yield return new WaitForSeconds(0.5f);
+
+        StartCoroutine(fadeOutSprite(transform.gameObject));
+
+        done = true;
+    }
 
      void checkEnd(){
         bool isEnd = true;
@@ -162,10 +187,10 @@ public class PetalManage : MonoBehaviour {
 
             if(isEnd == true){
                 if(petalsPicked % 2 == 0){
-                    end.text = "He loves me not";
+                    end.text = "He loves me not.";
                 }
                 else{
-                    end.text = "He loves me";
+                    end.text = "He loves me.";
                 }
                 if(done == false){
                     StartCoroutine(fadeInText(end));
@@ -173,5 +198,15 @@ public class PetalManage : MonoBehaviour {
             }
             
         }
+
+        //reload
+        if(transform.gameObject.GetComponent<SpriteRenderer>().enabled == false){ 
+            StartCoroutine(reload());
+        }
+     }
+
+     IEnumerator reload(){
+        yield return new WaitForSeconds(4f);
+        Application.LoadLevel(Application.loadedLevel);
      }
 }
